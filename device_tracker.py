@@ -4,6 +4,7 @@ import urllib.parse
 from datetime import timedelta
 
 import requests
+from requests.auth import HTTPBasicAuth
 import voluptuous as vol
 
 from homeassistant.components.device_tracker import (

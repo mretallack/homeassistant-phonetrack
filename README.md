@@ -36,7 +36,8 @@ device_tracker:
   - platform: phonetrack
     url: https://<NEXTCLOUD_URL>/index.php/apps/phonetrack/api/getuserlastpositions/
     token: <SHARED_VIEW_TOKEN>
-    
+    username: <username>
+    api_key: <Application API KEY>
     devices:
     - <DEVICE_NAME>
 ```
