@@ -34,7 +34,7 @@ In order to enable this custom device_tracker component, add this code snippet t
 ```yaml
 device_tracker:
   - platform: phonetrack
-    url: https://<NEXTCLOUD_URL>/index.php/apps/phonetrack/api/getlastpositions/
+    url: https://<NEXTCLOUD_URL>/index.php/apps/phonetrack/api/getuserlastpositions/
     token: <SHARED_VIEW_TOKEN>
     
     devices:

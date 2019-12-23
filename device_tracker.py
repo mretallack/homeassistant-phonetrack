@@ -9,7 +9,7 @@ import voluptuous as vol
 from homeassistant.components.device_tracker import (
     PLATFORM_SCHEMA, SOURCE_TYPE_GPS)
 from homeassistant.const import (
-    CONF_DEVICES, CONF_TOKEN, CONF_URL)
+    CONF_DEVICES, CONF_TOKEN, CONF_URL, CONF_API_KEY, CONF_USERNAME)
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.event import track_time_interval
 from homeassistant.helpers.typing import ConfigType
@@ -23,6 +23,8 @@ UPDATE_INTERVAL = timedelta(minutes=5)
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_DEVICES): vol.All(cv.ensure_list, [cv.string]),
     vol.Required(CONF_TOKEN): cv.string,
+    vol.Required(CONF_API_KEY): cv.string,
+    vol.Required(CONF_USERNAME): cv.string,
 	vol.Required(CONF_URL): cv.string,
     vol.Optional(CONF_MAX_GPS_ACCURACY, default=100000): vol.Coerce(float),
 })
@@ -44,6 +46,8 @@ class PhoneTrackDeviceTracker(object):
         self.hass = hass
         self.url = config[CONF_URL]
         self.token = config[CONF_TOKEN]
+        self.apikey = config[CONF_API_KEY]
+        self.username = config[CONF_USERNAME]
         self.devices = config[CONF_DEVICES]
         self.max_gps_accuracy = config[CONF_MAX_GPS_ACCURACY]
         self.see = see
@@ -57,7 +61,7 @@ class PhoneTrackDeviceTracker(object):
     def _update_info(self, now=None):
         """Update the device info."""
         _LOGGER.debug("Updating devices %s", now)
-        data = requests.get(urllib.parse.urljoin(self.url, self.token)).json()
+        data = requests.get(urllib.parse.urljoin(self.url, self.token), auth=HTTPBasicAuth(self.username, self.apikey)).json()
         data = data[self.token]
         for device in self.devices:
             if device not in data.keys():
